@@ -1,72 +1,74 @@
+import java.util.Scanner;
+
 public class Vehicle {
-    private int maXe,dungTich;
-    private double triGia;
-    private String chuXe,moTa;
- 
-    public Vehicle(int maXe, int dungTich, double triGia, String chuXe, String moTa) {
-        this.maXe = maXe;
-        this.dungTich = dungTich;
-        this.triGia = triGia;
-        this.chuXe = chuXe;
-        this.moTa = moTa;
+    private String model;
+    private int price;
+    private int engineCapacity;
+    
+    public Vehicle(String model, int price, int engineCapacity) {
+        this.model = model;
+        this.price = price;
+        this.engineCapacity = engineCapacity;
     }
-    public Vehicle(){
- 
+    
+    public double calculateTax() {
+        double tax = 0;
+        if (engineCapacity < 100) {
+            tax = price * 0.01;
+        } else if (engineCapacity >= 100 && engineCapacity < 200) {
+            tax = price * 0.03;
+        } else {
+            tax = price * 0.05;
+        }
+        return tax;
     }
-    public int getMaXe() {
-        return maXe;
-    }
- 
-    public void setMaXe(int maXe) {
-        this.maXe = maXe;
-    }
- 
-    public int getDungTich() {
-        return dungTich;
-    }
- 
-    public void setDungTich(int dungTich) {
-        this.dungTich = dungTich;
-    }
- 
-    public double getTriGia() {
-        return triGia;
-    }
- 
-    public void setTriGia(double triGia) {
-        this.triGia = triGia;
-    }
- 
-    public String getChuXe() {
-        return chuXe;
-    }
- 
-    public void setChuXe(String chuXe) {
-        this.chuXe = chuXe;
-    }
- 
-    public String getMoTa() {
-        return moTa;
-    }
- 
-    public void setMoTa(String moTa) {
-        this.moTa = moTa;
-    }
- 
-    public double tinhThue(){
-        double thue;
-        if(dungTich<100) thue=triGia*0.01;
-        else if (dungTich >= 100 && dungTich<=200) thue = triGia * 0.03;
-        else thue = triGia * 0.05;
-        return thue;
-    }
- 
-    @Override
-    public String toString() {
-        return maXe + "-"+chuXe + "-"+dungTich + "-"+triGia + "-"+moTa;
-}
- 
-    void inThue(){
-        System.out.printf("%5d %-20s %5d %10.2f %10s %8.5f \n ",maXe,chuXe,dungTich,triGia,moTa,tinhThue());
+    
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Vehicle[] vehicles = new Vehicle[3];
+        
+        while (true) {
+            System.out.println("Menu:");
+            System.out.println("1. Nhập thông tin và tạo các đối tượng xe");
+            System.out.println("2. Xuất bảng kê khai tiền thuế trước bạ của các xe");
+            System.out.println("3. Thoát");
+            System.out.print("Vui lòng chọn (1/2/3): ");
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+            
+            switch (choice) {
+                case 1:
+                    for (int i = 0; i < vehicles.length; i++) {
+                        System.out.println("Xe " + (i+1));
+                        System.out.print("Nhập model: ");
+                        String model = scanner.nextLine();
+                        System.out.print("Nhập giá tiền: ");
+                        int price = scanner.nextInt();
+                        System.out.print("Nhập dung tích động cơ: ");
+                        int engineCapacity = scanner.nextInt();
+                        scanner.nextLine();
+                        vehicles[i] = new Vehicle(model, price, engineCapacity);
+                    }
+                    System.out.println("Đã tạo các đối tượng xe thành công!");
+                    break;
+                    
+                case 2:
+                    System.out.printf("%-20s %-20s %-20s %-20s\n", "Model", "Giá tiền", "Dung tích động cơ", "Thuế trước bạ");
+                    for (Vehicle vehicle : vehicles) {
+                        double tax = vehicle.calculateTax();
+                        System.out.printf("%-20s %-20d %-20d %-20.2f\n", vehicle.model, vehicle.price, vehicle.engineCapacity, tax);
+                    }
+                    break;
+                    
+                case 3:
+                    System.out.println("Chương trình kết thúc!");
+                    System.exit(0);
+                    break;
+                    
+                default:
+                    System.out.println("Vui lòng nhập lựa chọn hợp lệ (1/2/3)!");
+                    break;
+            }
+        }
     }
 }
